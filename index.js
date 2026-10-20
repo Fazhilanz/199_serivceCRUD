@@ -55,9 +55,20 @@ app.put('/biodata/:id', (req, res) => {
                 });
             }
 
-            RES.json{(
-                messages: 'Data updated successfully',
+            res.json({
+                message: 'Data updated successfully',
                 data: result.rows[0],
-          
-}
+            });
+        })
+        .catch(err => {
+            console.error(err);
+            res.status(500).send('Internal Server Error');
+        });
+});
+
+//DELETE (hapus data)
+app.delete('/biodata/:id', (req, res) => {
+    const { id } = req.params;
     
+
+
