@@ -31,13 +31,17 @@ app.get('/',  (req, res) => {
 
 //POST (tambah data)
 app.post('/biodata', (req, res) => {
-  const { nama, email, alamat } = req.body;
+  const { nama, nim, kelas } = req.body;
 
-  pool.query('INSERT INTO biodata(nama, email, alamat) VALUES($1, $2, $3) RETURNING *',
-     [nama, email, alamat]
+  pool.query('INSERT INTO biodata(nama, nim, kelas) VALUES($1, $2, $3) RETURNING *',
+     [nama, nim, kelas]
   )
     .then((result) => res.json{result.rows[0]})
     .catch((err) => console.error(err));
 });
         
+//PUT (update data)
+app.put('/biodata/:id', (req, res) => {
+    const { id } = req.params;
+    const { nama, nim, kelas } = req.body;
     
