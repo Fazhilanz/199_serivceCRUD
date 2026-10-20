@@ -28,3 +28,11 @@ app.get('/',  (req, res) => {
         res.status(500).send('Internal Server Error' );
     });
 });
+
+//POST (tambah data)
+app.post('/biodata', (req, res) => {
+  const { nama, email, alamat } = req.body;
+
+  pool.query('INSERT INTO biodata(nama, email, alamat) VALUES($1, $2, $3) RETURNING *',
+     [nama, email, alamat]
+  )
