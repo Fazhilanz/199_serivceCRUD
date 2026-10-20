@@ -8,10 +8,10 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 const pool = new Pool({
-  user: 'posstgres  ',
+  user: 'postgres',
   host: 'localhost',
-  database: 'mahasiswa  ',
-  password: 'Pajila123  ',
+  database: 'mahasiswa',
+  password: '',
   port: 5432,
 });
 
@@ -36,22 +36,23 @@ app.post('/biodata', (req, res) => {
   pool.query('INSERT INTO biodata(nama, nim, kelas) VALUES($1, $2, $3) RETURNING *',
      [nama, nim, kelas]
   )
-    .then((result) => res.json{result.rows[0]})
+    .then((result) => res.json(result.rows[0]))
     .catch((err) => console.error(err));
 });
-        
+
+
 //PUT (update data)
 app.put('/biodata/:id', (req, res) => {
     const { id } = req.params;
     const { nama, nim, kelas } = req.body;
 
     pool.query('UPDATE biodata SET nama = $1, nim = $2, kelas = $3 WHERE id = $4 RETURNING *',
-        [nama, nim, kelas, id]
-    )
+        [nama, nim, kelas, id])
+
         .then(result => {
             if (result.rowCount === 0) {
                 return res.status(404).json({
-                    message: 'Data not found',      
+                    message: 'Data not found',
                 });
             }
 
@@ -66,6 +67,9 @@ app.put('/biodata/:id', (req, res) => {
         });
 });
 
+
+    
+
 //DELETE (hapus data)
 app.delete('/biodata/:id', (req, res) => {
     const { id } = req.params;
@@ -79,6 +83,20 @@ app.delete('/biodata/:id', (req, res) => {
                     message: 'Data not found',
                 });
             }
+            res.json({
+                message: 'Data deleted successfully',
+                data: result.rows[0],
+            });
+        })
+        .catch(err => {
+            console.error(err);
+            res.status(500).send('Internal Server Error');
+        });
+    });
+
+app.listen(port, () => {
+  console.log(`App running on port ${port}`);
+});
 
 
 
