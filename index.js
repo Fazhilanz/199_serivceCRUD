@@ -36,3 +36,8 @@ app.post('/biodata', (req, res) => {
   pool.query('INSERT INTO biodata(nama, email, alamat) VALUES($1, $2, $3) RETURNING *',
      [nama, email, alamat]
   )
+    .then((result) => res.json{result.rows[0]})
+    .catch((err) => console.error(err));
+});
+        
+    
